@@ -14,20 +14,21 @@ function renderTvShowButtons() {
     }
   }
 
-renderTvShowButtons();
-
 //Creates buttons based on user search
 $("#find-gif").on("click", function(event){
     event.preventDefault();
     var userInput=$("#user-input").val().trim();
     topics.push(userInput);
     renderTvShowButtons();
+    displayGif();
 });
 
-
-
+renderTvShowButtons();
 
 //Accesses GIPHY and searches for GIF
+function displayGif(){
+
+}
 $(".gif").on("click", function(){
     $("#tvshowGifs").empty();
     var tvshowName = $(this).attr("data-name");
@@ -40,25 +41,38 @@ $(".gif").on("click", function(){
     .then(function (response){
         var result = response.data;
         for(var i=0; i < result.length; i++){
-            var p = $("<p>")
-            p.text(result[i].rating);
+            var gifDiv=$("<div>");
+            var p = $("<p>");
+            var rating=p.text(result[i].rating);
+        
             var gifImg = $("<img>");
-            $("#tvshowGifs").append(gifImg);
-            gifImg.append(p);
-        
-            gifImg.addClass("tvshowGifs col-md-4");
+            gifImg.addClass("tvshowGifs col-md-4 animate");
             gifImg.attr("src", result[i].images.fixed_height_still.url);
-            gifImg.attr("data-still", result[i].images.fixed_height_still.url);
-            gifImg.attr("data-animate", result[i].images.fixed_height.url).attr("data-state", "still");
-            
-    
-        }
-    
-        
-    });
-    
-       
+            var still = result[i].images.fixed_height_still.url;
+            var animate = result[i].images.fixed_height.url;
+            // gifImg.attr("src", still);
+            // gifImg.attr("src", animate);
+            $(".animate").on("click", function(){
+                if(gifImg.attr("src", still)){
+                    gifImg.attr("src", animate);
+                }
 
+            });
+            
+
+            gifImg.append(rating);
+            $("#tvshowGifs").append(gifImg);
+            // $('.animate').on('click', function() {
+            //     var state = $(gifImg).attr('src');
+            //     if (state == 'still') {
+            //         $(this).attr('src', $(this).attr("src",animate));
+            //     } else {
+            //         $(this).attr('src', $(this).attr("data-still",result[i].images.fixed_height_still.url));
+            //     }
+        
+            // });
+        }  
+    }); 
     
 });
 
