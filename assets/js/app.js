@@ -25,8 +25,11 @@ $("#find-gif").on("click", function(event){
 });
 
 
+
+
 //Accesses GIPHY and searches for GIF
 $(".gif").on("click", function(){
+    $("#tvshowGifs").empty();
     var tvshowName = $(this).attr("data-name");
 
     var queryURL="https://api.giphy.com/v1/gifs/search?q=" + tvshowName + "&api_key=0iivG3ShYLcHPcMcZvDuiNwUWr39pErO&limit=10";
@@ -35,30 +38,30 @@ $(".gif").on("click", function(){
         method:"GET",
     })
     .then(function (response){
-        displayGif(response);
-    })
-        var results=response.data;
-        var gifImg = $("<img>").attr(results.url);
-        $("#tvshowGifs").append(gifImg);
-
-        for(var i=0; i < results.length; i++){
+        var result = response.data;
+        for(var i=0; i < result.length; i++){
             var p = $("<p>")
-            p.text(results[i].rating);
-            $("img").append(p);
+            p.text(result[i].rating);
+            var gifImg = $("<img>");
+            $("#tvshowGifs").append(gifImg);
+            gifImg.append(p);
         
             gifImg.addClass("tvshowGifs col-md-4");
-            gifImg.attr("src", results[i].url);
-            gifImg.attr("data-still", results[i].images.fixed_height_still.url);
-            gifImg.attr("data-animate", results[i].images.fixed_height.url).attr("data-state", "still");
-
-            showGifs.append(gifImg);
-            showGifs.append(p);
-            $("#tvshowGifs").append(gifImg);       
-            showGifs.addClass("gif-img");
-            showGifs
+            gifImg.attr("src", result[i].images.fixed_height_still.url);
+            gifImg.attr("data-still", result[i].images.fixed_height_still.url);
+            gifImg.attr("data-animate", result[i].images.fixed_height.url).attr("data-state", "still");
+            
+    
         }
+    
+        
+    });
+    
+       
 
+    
 });
+
 //------------------
 
 });
